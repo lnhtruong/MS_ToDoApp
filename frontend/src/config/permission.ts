@@ -1,0 +1,1 @@
+// Bản đồ quyền cho role
