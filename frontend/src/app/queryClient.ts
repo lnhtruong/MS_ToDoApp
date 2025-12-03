@@ -1,1 +1,1 @@
-// Tạo QueryClient và config
+// Tạo QueryClient để quản lý cache và trạng thái của các truy vấn dữ liệu
