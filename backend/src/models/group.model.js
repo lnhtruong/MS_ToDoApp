@@ -20,7 +20,7 @@ export class GroupModel {
   /**
    * Tạo nhóm mới
    */
-  static async create({ name, color = '#3b82f6' }) {
+  static async create({ name, color = 'bg-blue-500' }) {
     const trimmedName = name.trim();
     const { rows } = await pool.query(
       `INSERT INTO groups (name, color) 

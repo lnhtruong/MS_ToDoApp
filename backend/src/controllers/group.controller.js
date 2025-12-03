@@ -1,6 +1,21 @@
 import { GroupModel } from '../models/group.model.js';
 import pool from '../db/index.js';
 
+// Danh sách màu Tailwind hợp lệ
+const VALID_COLORS = [
+  'bg-red-500',
+  'bg-orange-500',
+  'bg-yellow-500',
+  'bg-green-500',
+  'bg-emerald-500',
+  'bg-teal-500',
+  'bg-cyan-500',
+  'bg-blue-500',
+  'bg-indigo-500',
+  'bg-purple-500',
+  'bg-pink-500',
+];
+
 export const groupController = {
   // GET /api/groups
   getAll: async (req, res) => {
@@ -22,8 +37,11 @@ export const groupController = {
         return res.status(400).json({ error: 'Tên nhóm là bắt buộc và không được để trống' });
       }
 
-      if (color && !/^#[0-9A-Fa-f]{6}$/i.test(color)) {
-        return res.status(400).json({ error: 'Màu phải đúng định dạng hex (#rrggbb)' });
+      if (color && !VALID_COLORS.includes(color)) {
+        return res.status(400).json({ 
+          error: 'Màu không hợp lệ',
+          validColors: VALID_COLORS 
+        });
       }
 
       const group = await GroupModel.create({ name, color });
@@ -44,8 +62,11 @@ export const groupController = {
         return res.status(400).json({ error: 'Tên nhóm không được để trống' });
       }
 
-      if (color && !/^#[0-9A-Fa-f]{6}$/i.test(color)) {
-        return res.status(400).json({ error: 'Màu phải đúng định dạng hex (#rrggbb)' });
+      if (color && !VALID_COLORS.includes(color)) {
+        return res.status(400).json({ 
+          error: 'Màu không hợp lệ',
+          validColors: VALID_COLORS 
+        });
       }
 
       const updatedGroup = await GroupModel.update(id, { name, color });
