@@ -2,16 +2,16 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 
-// Theme provider
-import { ThemeProvider } from "@/app/providers/theme-provider"
+// App Provider
+import { AppProvider } from '@/app/providers/app-provider'
 
-// Router
+// App Router
 import { AppRouter } from './routes/router'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
+    <AppProvider>
       <AppRouter />
-    </ThemeProvider>
-  </StrictMode>,
+    </AppProvider>
+  </StrictMode>
 )
