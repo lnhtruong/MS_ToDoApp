@@ -20,7 +20,6 @@ export const todoController = {
       if (!todo) return res.status(404).json({ error: 'Không tìm thấy công việc' });
       res.json(todo);
     } catch (err) {
-      console.error('Lỗi khi lấy chi tiết todo:', err);
       res.status(500).json({ error: 'Lỗi máy chủ nội bộ' });
     }
   },
@@ -42,6 +41,26 @@ export const todoController = {
     }
   },
 
+  // PUT /api/todos/:id
+  update: async (req, res) => {
+    try {
+      const { id } = req.params;
+      const { title, description, groupId } = req.body;
+
+      if (title !== undefined && (typeof title !== 'string' || title.trim() === '')) {
+        return res.status(400).json({ error: 'Tiêu đề không được để trống' });
+      }
+
+      const todo = await TodoModel.update(id, { title, description, groupId });
+      if (!todo) return res.status(404).json({ error: 'Không tìm thấy công việc' });
+
+      res.json(todo);
+    } catch (err) {
+      console.error('Lỗi khi cập nhật todo:', err);
+      res.status(500).json({ error: 'Không thể cập nhật công việc' });
+    }
+  },
+
   // PATCH /api/todos/:id/status
   toggleStatus: async (req, res) => {
     try {
@@ -55,7 +74,6 @@ export const todoController = {
 
       res.json(todo);
     } catch (err) {
-      console.error('Lỗi khi cập nhật trạng thái:', err);
       res.status(500).json({ error: 'Không thể cập nhật trạng thái' });
     }
   },
@@ -71,8 +89,24 @@ export const todoController = {
       await TodoModel.delete(req.params.id);
       res.status(204).send();
     } catch (err) {
-      console.error('Lỗi khi xóa todo:', err);
       res.status(500).json({ error: 'Không thể xóa công việc' });
+    }
+  },
+
+  // PATCH /api/todos/reorder
+  reorder: async (req, res) => {
+    try {
+      const { items } = req.body; // [{ id, order }, ...]
+
+      if (!Array.isArray(items) || items.length === 0) {
+        return res.status(400).json({ error: 'Danh sách items không hợp lệ' });
+      }
+
+      await TodoModel.reorder(items);
+      res.json({ message: 'Sắp xếp thành công' });
+    } catch (err) {
+      console.error('Lỗi reorder:', err);
+      res.status(500).json({ error: 'Không thể sắp xếp lại' });
     }
   },
 };
