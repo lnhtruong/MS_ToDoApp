@@ -1,4 +1,5 @@
 import { GroupModel } from '../models/group.model.js';
+import pool from '../db/index.js';
 
 export const groupController = {
   // GET /api/groups
